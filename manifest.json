@@ -1,6 +1,6 @@
 {
-  "name": "Asteroid Typer",
-  "short_name": "Asteroid Typer",
+  "name": "Star Speller",
+  "short_name": "Star Speller",
   "description": "A visual, fast-paced typing game for kids. Pick a topic pack and type the falling words before they crash into your ship.",
   "start_url": "./index.html",
   "scope": "./",

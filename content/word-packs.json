@@ -1,5 +1,5 @@
 {
-  "_readme": "Draft word packs for Asteroid Typer (kids 1-12). NOT wired into index.html yet — pending approval. Every word must be a single token (no spaces/hyphens, since the game types words as one continuous string). Run scripts/validate-word-packs.py after any edit.",
+  "_readme": "Word packs for Star Speller (kids 1-12), embedded directly into the PACKS const in index.html. Every word must be a single token (no spaces/hyphens, since the game types words as one continuous string). Run scripts/validate-word-packs.py after any edit, then re-embed the compact JSON into index.html.",
   "free": {
     "animals": {
       "name": "Animals",

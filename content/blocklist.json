@@ -1,5 +1,5 @@
 {
-  "_readme": "Kid-safety blocklist for Asteroid Typer word packs (ages 1-12). Every word generated for any pack is checked (case-insensitive, whole-word) against every list below before it's allowed into a pack. To ban a new word: add it (lowercase) to the most fitting category below, or to 'other' if none fit. Re-run scripts/validate-word-packs.py after editing this file to re-check all packs.",
+  "_readme": "Kid-safety blocklist for Star Speller word packs (ages 1-12). Every word generated for any pack is checked (case-insensitive, whole-word) against every list below before it's allowed into a pack. To ban a new word: add it (lowercase) to the most fitting category below, or to 'other' if none fit. Re-run scripts/validate-word-packs.py after editing this file to re-check all packs.",
 
   "privateBodyParts": [
     "penis", "vagina", "vulva", "scrotum", "testicle", "testicles",

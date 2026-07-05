@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asteroid Typer — Learn to Type with Fun Word Packs</title>
+<title>Star Speller — Learn to Type with Fun Word Packs</title>
 <meta name="description" content="A visual, fast-paced typing game for kids. Pick a topic pack — animals, colors, space, and more — and type the falling words before they crash into your ship.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Asteroid Typer — Learn to Type with Fun Word Packs">
+<meta property="og:title" content="Star Speller — Learn to Type with Fun Word Packs">
 <meta property="og:description" content="A visual, fast-paced typing game for kids. Pick a topic pack — animals, colors, space, and more — and type the falling words before they crash into your ship.">
 <meta property="og:url" content="https://sinanekounam.github.io/asteroid-typer/">
 <meta property="og:image" content="https://sinanekounam.github.io/asteroid-typer/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Asteroid Typer — Learn to Type with Fun Word Packs">
+<meta name="twitter:title" content="Star Speller — Learn to Type with Fun Word Packs">
 <meta name="twitter:description" content="A visual, fast-paced typing game for kids. Pick a topic pack and type the falling words before they crash into your ship.">
 <meta name="twitter:image" content="https://sinanekounam.github.io/asteroid-typer/og-image.png">
 <link rel="manifest" href="manifest.json">
@@ -279,7 +279,7 @@
   <!-- START SCREEN -->
   <div id="startScreen" class="screen">
     <div class="panel">
-      <h1 class="title">☄ ASTEROID TYPER</h1>
+      <h1 class="title">⭐ STAR SPELLER</h1>
       <p class="subtitle">Pick a topic, then type the falling words before they crash into your ship.</p>
       <div class="pack-section-title">Free Packs</div>
       <div class="pack-grid" id="freePackGrid"></div>
@@ -357,6 +357,7 @@
   const BASE_FALL_SPEED = 1.0;   // px/frame baseline at 60fps; actual speed also scales with word length + level
   const BASE_SPAWN_MS = 1800;
   const LIVES = 3;
+  const WORDS_PER_LEVEL = 12;    // words destroyed before leveling up (was 8 - complaints that difficulty spiked too fast)
 
   /* ---------------- Audio (synthesized, no assets) ---------------- */
   let audioCtx = null;
@@ -520,7 +521,7 @@
     // shorter words fall slowly (friendly for little kids); longer words
     // fall faster and are worth more points (scoring already scales with length)
     const lengthFactor = 0.6 + word.length * 0.035;
-    const levelMultiplier = 1 + (s.level - 1) * 0.15;
+    const levelMultiplier = 1 + (s.level - 1) * 0.08;
     const speed = BASE_FALL_SPEED * lengthFactor * levelMultiplier * (0.9 + Math.random() * 0.2);
 
     const asteroid = {
@@ -622,12 +623,12 @@
   }
 
   function maybeLevelUp(s) {
-    const targetLevel = Math.floor(s.wordsDestroyed / 8) + 1;
+    const targetLevel = Math.floor(s.wordsDestroyed / WORDS_PER_LEVEL) + 1;
     if (targetLevel > s.level) {
       s.level = targetLevel;
       // fall speed ramps via the per-asteroid levelMultiplier in spawnAsteroid;
       // only the spawn rate needs updating here
-      s.spawnInterval = Math.max(500, BASE_SPAWN_MS * Math.pow(0.9, s.level - 1));
+      s.spawnInterval = Math.max(700, BASE_SPAWN_MS * Math.pow(0.95, s.level - 1));
       showLevelUp(s);
     }
   }
@@ -799,10 +800,8 @@
 </script>
 <script>
   // Register the offline-cache service worker for installable-PWA support.
-  // Skipped inside the native app shell (Capacitor serves over capacitor://
-  // or file://, where a service worker adds no value) and on http:// (SW
-  // registration requires a secure context).
-  if ('serviceWorker' in navigator && !window.Capacitor && location.protocol === 'https:') {
+  // Skipped on http:// since SW registration requires a secure context.
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('service-worker.js').catch(() => {});
     });
