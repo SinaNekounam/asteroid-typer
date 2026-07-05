@@ -16,6 +16,9 @@
 <meta name="twitter:title" content="Asteroid Typer — Learn to Type with Fun Word Packs">
 <meta name="twitter:description" content="A visual, fast-paced typing game for kids. Pick a topic pack and type the falling words before they crash into your ship.">
 <meta name="twitter:image" content="https://sinanekounam.github.io/asteroid-typer/og-image.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#05070f">
+<link rel="apple-touch-icon" href="icons/icon-192.webp">
 <style>
   :root {
     --bg: #05070f;
@@ -793,6 +796,17 @@
 
   showScreen(startScreen);
 })();
+</script>
+<script>
+  // Register the offline-cache service worker for installable-PWA support.
+  // Skipped inside the native app shell (Capacitor serves over capacitor://
+  // or file://, where a service worker adds no value) and on http:// (SW
+  // registration requires a secure context).
+  if ('serviceWorker' in navigator && !window.Capacitor && location.protocol === 'https:') {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js').catch(() => {});
+    });
+  }
 </script>
 </body>
 </html>

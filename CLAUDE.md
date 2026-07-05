@@ -4,28 +4,65 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-"Asteroid Typer" — a single-file, dependency-free typing game for kids (ages ~1-12). Words ("asteroids")
-fall from the top of the screen toward a ship; the player types each word exactly to destroy it before it
-lands. Instead of difficulty levels, the player picks a subject **pack** (Animals, Colors, Space, Math,
-etc.) — 12 free packs and 12 premium (visually locked, no payment integration yet). There is no build step,
-no package manager, and no framework — everything lives in [index.html](index.html) (HTML + a `<style>`
-block + a single `<script>` IIFE).
+"Asteroid Typer" — a dependency-free typing game for kids (ages ~1-12), playable on the web, iOS, and
+Android from **one codebase**. Words ("asteroids") fall from the top of the screen toward a ship; the
+player types each word exactly to destroy it before it lands. Instead of difficulty levels, the player
+picks a subject **pack** (Animals, Colors, Space, Math, etc.) — 12 free packs and 12 premium (visually
+locked, no payment integration yet).
 
-## Running it
+The entire game is still one file, [index.html](index.html) (HTML + a `<style>` block + a single `<script>`
+IIFE) — no framework, no bundler for the game logic itself. Mobile packaging is handled by **Capacitor**,
+which wraps that same `index.html` in a thin native WebView shell for iOS/Android. **`index.html` at the
+repo root is the single source of truth** — never hand-edit anything under `www/`, `android/app/src/main/
+assets/public/`, or `ios/App/App/public/`; those are generated copies (see Mobile section below).
 
-There's no bundler/dev-server dependency baked into the project — just serve the static file and open it
-in a browser:
+## Running it (web)
+
+There's no bundler/dev-server dependency baked into the game itself — just serve the static file and open
+it in a browser:
 
 ```bash
 python -m http.server 5173
 ```
 
 This matches the `static-server` configuration in `.claude/launch.json` (used by the Claude Code preview
-tool). Node/npx is **not** assumed to be available in this environment — prefer Python's built-in server
-over `npx serve` when starting a static server here.
+tool). Prefer this over `npx serve` for quick local checks of `index.html` directly — Node is now installed
+(see Mobile section) but the plain static server is still the fastest loop for pure web/gameplay changes.
 
-There is no test suite, linter, or build command — verify changes by loading the page in a browser and
-playing through the game loop (see Verification below).
+There is no test suite, linter, or build command for the game logic — verify changes by loading the page in
+a browser and playing through the game loop (see Verification below).
+
+## Mobile (Capacitor) — iOS & Android
+
+`package.json` + `capacitor.config.json` (`appId: com.sinanekounam.asteroidtyper`, `webDir: www`) wrap the
+web app for native platforms. Key thing to internalize: **`www/` is a build output, not source** — it's
+populated by copying root-level files, never edited directly.
+
+- `scripts/sync-web.js` copies `index.html`, `og-image.png`, `manifest.json`, `service-worker.js`, and
+  `icons/` from the repo root into `www/`. Run via `npm run sync-web`.
+- `npm run cap:sync` runs that sync, then `npx cap sync` (copies `www/` into `android/app/src/main/assets/
+  public/` and `ios/App/App/public/`, and updates native plugin registration). **Run this after any change
+  to `index.html` before testing/building the native apps** — otherwise the native shells serve a stale copy.
+- `android/` and `ios/` are the actual native projects (committed to git, per normal Capacitor convention —
+  they're not disposable build output; `AndroidManifest.xml`, `Info.plist`, signing config, etc. all live in
+  there and may need hand-editing later). Build artifacts inside them (`android/app/build/`, `ios/App/Pods/`,
+  etc.) are gitignored.
+- App icon/splash source images live in `assets/` (`icon.png`, `icon-foreground.png`, `splash.png`,
+  `splash-dark.png` — all derived from one square rocket-ship icon). Regenerate all platform sizes after
+  changing these with `npx capacitor-assets generate`, which also refreshes the PWA icon set in `icons/`.
+- **No local Xcode or Android Studio is assumed available in this environment** (this is a Windows machine;
+  iOS builds require macOS per Apple's toolchain requirement). `.github/workflows/build-mobile.yml` builds an
+  unsigned debug APK (Android, `ubuntu-latest`) and an unsigned iOS Simulator build (`macos-latest`) on every
+  push, purely to catch native-project breakage in CI. **Neither job produces a store-submittable build** —
+  real App Store/Play Store releases need the user's own Apple/Google developer accounts and signing
+  certificates wired in as repo secrets, which hasn't been set up.
+- The web build also doubles as an installable PWA: `manifest.json` + `service-worker.js` (offline caching)
+  are linked from `index.html`'s `<head>`. The service worker registration is guarded to skip when running
+  inside the Capacitor native shell (`window.Capacitor` present) or over plain `http://` (registration
+  requires a secure context) — see the small `<script>` block right before `</body>`.
+
+There is no test suite, linter, or build command beyond what's described above — verify changes by loading
+the page in a browser and playing through the game loop (see Verification below).
 
 ## Architecture (all in `index.html`)
 
@@ -96,3 +133,6 @@ Manual test pass after any change (no automated tests exist):
 - Resize to mobile/tablet/desktop — the HUD uses `clamp()` sizing and `flex-wrap`, and the start screen
   `.panel` scrolls (`max-height: 88vh; overflow-y: auto`) to fit the 24-pack grid on short viewports;
   re-check both if touching that CSS.
+- If `index.html` changed, run `npm run cap:sync` before assuming the native apps reflect it — the
+  `.github/workflows/build-mobile.yml` CI run (Android debug APK + iOS Simulator build) is the cheapest way
+  to confirm the native projects still build after a change.
