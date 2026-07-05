@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 "Asteroid Typer" — a single-file, dependency-free typing game for kids (ages ~1-12). Words ("asteroids")
 fall from the top of the screen toward a ship; the player types each word exactly to destroy it before it
 lands. Instead of difficulty levels, the player picks a subject **pack** (Animals, Colors, Space, Math,
-etc.) — 10 free packs and 14 premium (visually locked, no payment integration yet). There is no build step,
+etc.) — 12 free packs and 12 premium (visually locked, no payment integration yet). There is no build step,
 no package manager, and no framework — everything lives in [index.html](index.html) (HTML + a `<style>`
 block + a single `<script>` IIFE).
 

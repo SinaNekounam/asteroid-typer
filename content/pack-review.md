@@ -48,6 +48,16 @@
 **Explorer** (29): mechanic, engineer, musician, scientist, architect, carpenter, detective, developer, paramedic, therapist, dietitian, chemist, biologist, physicist, surgeon, optician, electrician, zookeeper, astronomer, geologist, historian, translator, journalist, photographer, choreographer, firefighter, policeman, policewoman, veterinarian
 **Champion** (28): cardiologist, anesthesiologist, paleontologist, meteorologist, cartographer, archaeologist, entrepreneur, astrophysicist, microbiologist, oceanographer, pharmacologist, radiologist, orthodontist, cinematographer, ambassador, legislator, diplomat, economist, podiatrist, chiropractor, optometrist, criminologist, psychologist, anthropologist, seismologist, volcanologist, ornithologist, entomologist
 
+### 🐠 Ocean Life  (Free)
+**Starter** (30): fish, crab, seal, clam, eel, squid, shark, whale, coral, reef, tide, wave, shell, kelp, algae, otter, shrimp, oyster, lobster, dolphin, jellyfish, starfish, seahorse, stingray, octopus, plankton, current, seaweed, anchor, harbor
+**Explorer** (21): barnacle, anemone, mollusk, crustacean, tidepool, lagoon, coastline, submarine, underwater, aquatic, marine, tsunami, shipwreck, sailboat, waterfall, estuary, shoreline, navigation, snorkel, scuba, lighthouse
+**Champion** (25): barracuda, invertebrate, phytoplankton, zooplankton, bioluminescent, echolocation, cephalopod, exoskeleton, photosynthesis, ecosystem, biodiversity, oceanography, hydrothermal, continental, abyssal, pelagic, intertidal, desalination, conservation, migration, camouflage, adaptation, symbiosis, predator, habitat
+
+### 🐦 Birds  (Free)
+**Starter** (30): owl, hen, hawk, crow, dove, duck, goose, swan, robin, eagle, stork, finch, heron, parrot, toucan, pelican, sparrow, cardinal, seagull, penguin, feather, wing, beak, nest, perch, flock, chirp, tweet, glide, soar
+**Explorer** (29): flamingo, peacock, ostrich, woodpecker, hummingbird, albatross, cockatoo, kingfisher, mockingbird, chickadee, hawkeagle, migratory, plumage, talon, wingspan, hatchling, incubate, migration, predator, nocturnal, songbird, waterfowl, perching, flightless, camouflage, territory, habitat, aviary, ornithology
+**Champion** (30): ornithologist, incubation, predatory, territorial, diurnal, raptor, aerodynamic, navigation, echolocation, biodiversity, conservation, endangered, cryptic, crepuscular, altricial, precocial, piscivorous, insectivorous, granivorous, omnivorous, carnivorous, aviculture, avifauna, preening, molting, roosting, brooding, fledgling, thermoregulation, vocalization
+
 ### ➕ Math  (Premium)
 **Starter** (30): sum, add, plus, less, more, zero, ten, one, two, six, nine, pair, half, even, odd, unit, digit, count, total, equal, graph, chart, shape, group, order, short, long, tall, wide, size
 **Explorer** (30): number, addition, subtract, multiply, divide, fraction, decimal, average, measure, estimate, sequence, diagram, pattern, symmetry, quantity, distance, triangle, rectangle, perimeter, diameter, calculate, equation, variable, function, negative, positive, greater, smaller, between, doubling
@@ -78,11 +88,6 @@
 **Explorer** (27): asteroid, astronaut, telescope, spacecraft, atmosphere, meteorite, spacesuit, cosmonaut, orbiting, supernova, starlight, interstellar, exoplanet, spaceship, launchpad, spacewalk, zerogravity, lightyear, constellation, observatory, planetary, celestial, astronomy, cosmology, gravitational, aerospace, module
 **Champion** (21): astronomical, extraterrestrial, astrophysics, hyperspace, antimatter, wormhole, spectroscopy, astrobiology, stratosphere, exosphere, magnetosphere, heliosphere, astrogation, navigation, propulsion, trajectory, acceleration, weightlessness, microgravity, spacetime, planetarium
 
-### 🐠 Ocean Life  (Premium)
-**Starter** (30): fish, crab, seal, clam, eel, squid, shark, whale, coral, reef, tide, wave, shell, kelp, algae, otter, shrimp, oyster, lobster, dolphin, jellyfish, starfish, seahorse, stingray, octopus, plankton, current, seaweed, anchor, harbor
-**Explorer** (21): barnacle, anemone, mollusk, crustacean, tidepool, lagoon, coastline, submarine, underwater, aquatic, marine, tsunami, shipwreck, sailboat, waterfall, estuary, shoreline, navigation, snorkel, scuba, lighthouse
-**Champion** (25): barracuda, invertebrate, phytoplankton, zooplankton, bioluminescent, echolocation, cephalopod, exoskeleton, photosynthesis, ecosystem, biodiversity, oceanography, hydrothermal, continental, abyssal, pelagic, intertidal, desalination, conservation, migration, camouflage, adaptation, symbiosis, predator, habitat
-
 ### 🦕 Dinosaurs  (Premium)
 **Starter** (30): rex, claw, bone, fang, fossil, egg, tail, horn, spike, scale, giant, ancient, extinct, reptile, predator, herd, swamp, jungle, volcano, meteor, jaw, tooth, roar, stomp, huge, massive, prehistoric, dino, lizard, beast
 **Explorer** (27): stegosaurus, triceratops, velociraptor, brontosaurus, pterodactyl, allosaurus, ankylosaurus, dinosaur, carnivore, herbivore, paleontology, excavation, skeleton, fossilized, extinction, cretaceous, jurassic, triassic, migration, habitat, evolution, reptilian, gigantic, ferocious, territory, nesting, hatchling
@@ -92,11 +97,6 @@
 **Starter** (30): ant, bee, fly, bug, gnat, moth, tick, flea, wasp, aphid, larva, beetle, cricket, ladybug, firefly, termite, mosquito, dragonfly, butterfly, cocoon, antenna, wing, sting, hive, swarm, crawl, buzz, hop, nest, web
 **Explorer** (28): cockroach, centipede, millipede, grasshopper, caterpillar, exoskeleton, metamorphosis, pollinate, camouflage, antennae, mandible, thorax, abdomen, segment, colony, predator, habitat, migration, nocturnal, larvae, pupa, chrysalis, invertebrate, arthropod, entomology, infestation, burrow, molting
 **Champion** (30): entomologist, pheromone, proboscis, segmentation, bioluminescence, pollination, arachnid, crustacean, myriapod, coleoptera, lepidoptera, hymenoptera, orthoptera, hemimetabolous, holometabolous, chitin, spiracle, compound, gregarious, diapause, instar, ovipositor, elytra, stridulation, aposematism, mimicry, parasitism, symbiosis, biomimicry, taxonomy
-
-### 🐦 Birds  (Premium)
-**Starter** (30): owl, hen, hawk, crow, dove, duck, goose, swan, robin, eagle, stork, finch, heron, parrot, toucan, pelican, sparrow, cardinal, seagull, penguin, feather, wing, beak, nest, perch, flock, chirp, tweet, glide, soar
-**Explorer** (29): flamingo, peacock, ostrich, woodpecker, hummingbird, albatross, cockatoo, kingfisher, mockingbird, chickadee, hawkeagle, migratory, plumage, talon, wingspan, hatchling, incubate, migration, predator, nocturnal, songbird, waterfowl, perching, flightless, camouflage, territory, habitat, aviary, ornithology
-**Champion** (30): ornithologist, incubation, predatory, territorial, diurnal, raptor, aerodynamic, navigation, echolocation, biodiversity, conservation, endangered, cryptic, crepuscular, altricial, precocial, piscivorous, insectivorous, granivorous, omnivorous, carnivorous, aviculture, avifauna, preening, molting, roosting, brooding, fledgling, thermoregulation, vocalization
 
 ### 🌸 Plants & Flowers  (Premium)
 **Starter** (30): bud, rose, tree, leaf, stem, root, seed, vine, fern, moss, twig, bloom, petal, daisy, tulip, lily, cactus, bush, grass, shrub, branch, trunk, thorn, garden, forest, meadow, sprout, soil, water, grow
