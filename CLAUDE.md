@@ -4,10 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-"Asteroid Typer" — a single-file, dependency-free typing-speed arcade game. Words ("asteroids") fall from
-the top of the screen toward a ship; the player types each word exactly to destroy it before it lands.
-There is no build step, no package manager, and no framework — everything lives in [index.html](index.html)
-(HTML + a `<style>` block + a single `<script>` IIFE).
+"Asteroid Typer" — a single-file, dependency-free typing game for kids (ages ~1-12). Words ("asteroids")
+fall from the top of the screen toward a ship; the player types each word exactly to destroy it before it
+lands. Instead of difficulty levels, the player picks a subject **pack** (Animals, Colors, Space, Math,
+etc.) — 10 free packs and 14 premium (visually locked, no payment integration yet). There is no build step,
+no package manager, and no framework — everything lives in [index.html](index.html) (HTML + a `<style>`
+block + a single `<script>` IIFE).
 
 ## Running it
 
@@ -30,11 +32,17 @@ playing through the game loop (see Verification below).
 The script is one IIFE with distinct sections marked by `/* ---- Section ---- */` comments. Reading order
 that matters:
 
-1. **Word pools & difficulty config** (`WORDS_EASY`/`WORDS_MEDIUM`/`WORDS_HARD`/`WORDS_IMPOSSIBLE`,
-   `DIFF_CONFIG`) — each difficulty maps to `{ fallSpeed, spawnMs, pools, lives }`. `pools` is an array of
-   word lists tried in order as the player's level increases (see `pickWord`), and `lives` sets the starting
-   life count for that difficulty. Adding a new difficulty or word tier means updating both the word array
-   and its `DIFF_CONFIG` entry, plus a matching CSS tier class/color and a `.diff-btn` in the start screen.
+1. **Word packs** (`PACKS` — a `{ free: {...}, premium: {...} }` object) — each pack has `name`, `icon`, and
+   three word-list tiers: `starter`/`explorer`/`champion` (easy → hard within that subject). `PACKS` is a
+   direct embed of [content/word-packs.json](content/word-packs.json) (minus its `_readme` key); **that JSON
+   file is the source of truth** — edit it, run `scripts/validate-word-packs.py` (checks every word against
+   [content/blocklist.json](content/blocklist.json) for kid-safety and flags cross-tier duplicates or
+   invalid tokens), then re-embed the compact JSON into the `PACKS` const in `index.html`. Every word must be
+   a single a-z token — no spaces/hyphens/accents — since the game types words as one continuous string.
+   `pickWord` walks `[starter, explorer, champion]` as the player's level increases, same mechanism the old
+   difficulty tiers used. Premium packs render with a lock badge (`.pack-tile.locked`) and show a toast
+   (`showLockedMessage`) instead of starting a game — there's no real payment/subscription system wired up
+   yet, so treat "premium" as UI-only gating for now.
 
 2. **Audio** (`ensureAudio`, `beep`, `sfx`) — all sound is synthesized via the Web Audio API (oscillators),
    no audio files. `sfx` is a small dictionary of named cues (`key`, `destroy`, `miss`, `lifeLost`,
@@ -49,7 +57,11 @@ that matters:
    **delta-time normalized**, not frame-count based: `frames = dt / (1000/60)`, then
    `a.y += a.speed * frames`, with `dt` clamped to 100ms to avoid teleporting after tab-throttling/backgrounding.
    Keep this pattern when changing movement/timing logic — a naive `a.y += a.speed` per rAF call ties speed
-   to actual frame rate and was a real bug fixed previously.
+   to actual frame rate and was a real bug fixed previously. Per-asteroid fall speed (set in `spawnAsteroid`)
+   is **word-length- and level-based**, not pack-based: `BASE_FALL_SPEED * lengthFactor(word) *
+   levelMultiplier(level) * jitter` — shorter words fall slowly (friendly for young kids), longer words fall
+   faster and are worth more points (`word.length * 10` in `handleWordComplete`). There's no per-pack
+   difficulty config anymore; `BASE_FALL_SPEED`/`BASE_SPAWN_MS`/`LIVES` are the same for every pack.
 
 5. **Input handling** (`onKeyDown`) — listens on `document`, not just a focused input (a hidden `<input>`
    exists only to summon mobile keyboards). Typed characters are matched as a *prefix* against all live
@@ -71,13 +83,16 @@ Direct `.click()` via `preview_eval` is a reliable fallback when coordinate-base
 ## Verification
 
 Manual test pass after any change (no automated tests exist):
-- Start on each difficulty (Easy/Medium/Hard/Impossible); confirm word pools, fall speed, and life count
-  differ as configured.
+- If `content/word-packs.json` or `content/blocklist.json` changed, run
+  `python scripts/validate-word-packs.py` first and fix any errors before re-embedding into `index.html`.
+- Select a free pack and confirm words on screen come from that pack (not another one).
+- Click a premium pack — confirm it shows the lock toast and does **not** start a game.
 - Type full words correctly — confirm progressive letter highlighting, destroy animation + sound, and
-  score/WPM/accuracy updates.
+  score/WPM/accuracy updates; confirm longer words visibly fall faster than short ones.
 - Mistype deliberately — confirm accuracy drops and combo resets.
 - Let a word fall to the bottom — confirm a life is lost, screen-shake plays, and game-over triggers at 0
   lives with correct final stats.
 - Check `preview_console_logs` (or browser devtools) for runtime errors.
-- Resize to mobile/tablet/desktop — the HUD uses `clamp()` sizing and `flex-wrap` specifically to avoid
-  overflowing on narrow viewports; re-check this if touching HUD CSS.
+- Resize to mobile/tablet/desktop — the HUD uses `clamp()` sizing and `flex-wrap`, and the start screen
+  `.panel` scrolls (`max-height: 88vh; overflow-y: auto`) to fit the 24-pack grid on short viewports;
+  re-check both if touching that CSS.

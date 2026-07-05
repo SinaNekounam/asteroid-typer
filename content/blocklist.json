@@ -1,0 +1,54 @@
+{
+  "_readme": "Kid-safety blocklist for Asteroid Typer word packs (ages 1-12). Every word generated for any pack is checked (case-insensitive, whole-word) against every list below before it's allowed into a pack. To ban a new word: add it (lowercase) to the most fitting category below, or to 'other' if none fit. Re-run scripts/validate-word-packs.py after editing this file to re-check all packs.",
+
+  "privateBodyParts": [
+    "penis", "vagina", "vulva", "scrotum", "testicle", "testicles",
+    "breast", "breasts", "nipple", "nipples", "buttocks", "anus",
+    "groin", "genital", "genitals", "pubic", "clitoris", "labia"
+  ],
+
+  "sexualOrAdult": [
+    "sex", "sexy", "porn", "pornography", "nude", "naked", "orgasm",
+    "erotic", "prostitute", "condom", "masturbate", "fetish", "strip",
+    "stripper", "hooker", "virgin", "horny", "climax"
+  ],
+
+  "profanity": [
+    "damn", "hell", "crap", "ass", "bitch", "bastard", "slut", "whore",
+    "fuck", "fucking", "shit", "piss", "dick", "cock", "pussy", "cunt",
+    "twat", "wank", "arse", "bollocks"
+  ],
+
+  "substances": [
+    "alcohol", "beer", "wine", "vodka", "whiskey", "rum", "cigarette",
+    "cigar", "smoke", "smoking", "tobacco", "drug", "drugs", "cocaine",
+    "heroin", "marijuana", "weed", "meth", "overdose", "drunk", "vape",
+    "vaping", "nicotine"
+  ],
+
+  "violenceAndWeapons": [
+    "kill", "killer", "murder", "murderer", "gun", "pistol", "rifle",
+    "shotgun", "bullet", "knife", "dagger", "sword", "blade", "bomb",
+    "grenade", "explosive", "weapon", "shoot", "shooting", "stab",
+    "stabbing", "assault", "abuse", "rape", "massacre", "terrorist",
+    "terrorism", "hostage", "torture", "execute", "execution"
+  ],
+
+  "disturbingOrScary": [
+    "suicide", "self-harm", "selfharm", "corpse", "gore", "gory",
+    "mutilate", "mutilation", "decapitate", "dismember", "carcass",
+    "rotting", "maggot", "nightmare", "horror"
+  ],
+
+  "hateAndSlurs": [
+    "nazi", "hitler", "slur", "retard", "retarded", "faggot", "fag",
+    "nigger", "chink", "spic", "kike", "tranny"
+  ],
+
+  "other": [
+    "hate", "stupid", "idiot", "dumb", "ugly", "loser", "die", "dying",
+    "bloody", "wound", "wounded", "injury", "poison", "poisonous",
+    "toxic", "hostage", "prison", "jail", "criminal", "steal", "stealing",
+    "thief", "lie", "liar", "cheat", "cheater"
+  ]
+}
