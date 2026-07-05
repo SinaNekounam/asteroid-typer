@@ -75,11 +75,21 @@ that matters:
 
 5. **Input handling** (`onKeyDown`) — listens on `document`, not just a focused input (a hidden `<input>`
    exists only to summon mobile keyboards). Typed characters are matched as a *prefix* against all live
-   asteroid words; a wrong keystroke resets the typed buffer and breaks the combo. Word completion is
-   detected via exact match against `s.typed`.
+   asteroid words; a wrong keystroke breaks the combo but **does not** clear `s.typed` — only invalid/non-
+   matching prefixes get discarded (i.e. Backspace still works, and a mistyped letter doesn't erase progress
+   already typed correctly). This was deliberately softened from "wipe on any miss" after finding it too
+   punishing for beginners. Word completion is detected via exact match against `s.typed`.
 
 6. **Screen management** (`showScreen`, `startGame`, `endGame`) — three top-level screens (`#startScreen`,
    `#gameScreen`, `#gameOverScreen`) are toggled via a `.hidden` class; only one is visible at a time.
+
+7. **Best-score persistence** (`loadBestScores`/`saveBestScoreIfHigher`/`getBestScore`) — per-pack high score
+   and WPM saved to `localStorage` under the `starSpeller.bestScores.v1` key (`{ [packId]: { score, wpm } }`).
+   Free pack tiles show a `🏆 <score>` badge (`.pack-best-badge`) when a best exists; `endGame` saves a new
+   best if `s.score > 0` and higher than the stored one, shows the `#newBestBanner` on the game-over screen,
+   and refreshes that pack's tile badge in place via `refreshPackBestBadge` (the pack grid itself is only
+   ever rendered once at load — don't call `renderPackGrids()` again or it'll duplicate every tile, since it
+   `appendChild`s without clearing first).
 
 ## Known environment quirk (not a code bug)
 
@@ -99,9 +109,12 @@ Manual test pass after any change (no automated tests exist):
 - Click a premium pack — confirm it shows the lock toast and does **not** start a game.
 - Type full words correctly — confirm progressive letter highlighting, destroy animation + sound, and
   score/WPM/accuracy updates; confirm longer words visibly fall faster than short ones.
-- Mistype deliberately — confirm accuracy drops and combo resets.
+- Mistype deliberately — confirm accuracy drops and combo resets, but correctly-typed progress on the
+  current word is **not** erased.
 - Let a word fall to the bottom — confirm a life is lost, screen-shake plays, and game-over triggers at 0
   lives with correct final stats.
+- Beat a pack's previous best score — confirm the "New Best" banner shows on game-over and the pack's tile
+  on the start screen picks up the updated `🏆` badge without duplicating tiles.
 - Check `preview_console_logs` (or browser devtools) for runtime errors.
 - Resize to mobile/tablet/desktop — the HUD uses `clamp()` sizing and `flex-wrap`, and the start screen
   `.panel` scrolls (`max-height: 88vh; overflow-y: auto`) to fit the 24-pack grid on short viewports;

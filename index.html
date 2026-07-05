@@ -115,6 +115,16 @@
   .pack-tile.locked { opacity: 0.55; border-color: var(--premium); }
   .pack-tile.locked:hover { transform: none; }
   .pack-lock-badge { position: absolute; top: 4px; right: 6px; font-size: 13px; }
+  .pack-best-badge {
+    position: absolute; bottom: 3px; left: 0; right: 0; text-align: center;
+    font-size: 9px; font-weight: 700; color: var(--medium); letter-spacing: 0.5px;
+  }
+
+  .new-best {
+    color: var(--medium); font-weight: 800; font-size: 18px; letter-spacing: 1px;
+    text-shadow: 0 0 12px var(--medium); margin: 4px 0 0;
+  }
+  .new-best.hidden { display: none; }
 
   #lockToast {
     position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
@@ -293,12 +303,14 @@
   <div id="gameOverScreen" class="screen hidden">
     <div class="panel">
       <h1 class="title" style="color:var(--danger); text-shadow:0 0 12px var(--danger)">SHIP DESTROYED</h1>
+      <p id="newBestBanner" class="new-best hidden">🏆 New Best Score!</p>
       <div class="stats-final">
         <div><span class="val" id="finalScore">0</span><span class="lbl">Score</span></div>
         <div><span class="val" id="finalWpm">0</span><span class="lbl">WPM</span></div>
         <div><span class="val" id="finalAcc">0%</span><span class="lbl">Accuracy</span></div>
         <div><span class="val" id="finalLevel">1</span><span class="lbl">Level Reached</span></div>
       </div>
+      <p id="encourageMsg" class="subtitle"></p>
       <button class="big-btn" id="retryBtn">PLAY AGAIN</button>
     </div>
   </div>
@@ -417,13 +429,43 @@
   let selectedPackId = null;
   let selectedPack = null;
 
+  /* ---------------- Best-score persistence (localStorage) ---------------- */
+  const BEST_SCORES_KEY = 'starSpeller.bestScores.v1';
+
+  function loadBestScores() {
+    try {
+      return JSON.parse(localStorage.getItem(BEST_SCORES_KEY)) || {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function getBestScore(packId) {
+    return loadBestScores()[packId] || null;
+  }
+
+  function saveBestScoreIfHigher(packId, score, wpm) {
+    const all = loadBestScores();
+    const current = all[packId];
+    if (!current || score > current.score) {
+      all[packId] = { score, wpm };
+      try {
+        localStorage.setItem(BEST_SCORES_KEY, JSON.stringify(all));
+      } catch (e) { /* storage unavailable (private browsing, etc.) - skip silently */ }
+      return true;
+    }
+    return false;
+  }
+
   function makePackTile(id, pack, locked) {
     const tile = document.createElement('button');
     tile.className = 'pack-tile' + (locked ? ' locked' : '');
     tile.dataset.packId = id;
+    const best = !locked ? getBestScore(id) : null;
     tile.innerHTML = '<span class="pack-icon">' + pack.icon + '</span>' +
       '<span class="pack-name">' + pack.name + '</span>' +
-      (locked ? '<span class="pack-lock-badge">🔒</span>' : '');
+      (locked ? '<span class="pack-lock-badge">🔒</span>' : '') +
+      (best ? '<span class="pack-best-badge">🏆 ' + best.score + '</span>' : '');
     tile.addEventListener('click', () => {
       if (locked) {
         showLockedMessage(pack.name);
@@ -469,9 +511,10 @@
   /* ---------------- Game state ---------------- */
   let state = null;
 
-  function makeState(pack) {
+  function makeState(pack, packId) {
     return {
       pack,
+      packId,
       asteroids: [],   // {el, word, x, y, speed, tier, id}
       typed: '',
       score: 0,
@@ -701,12 +744,11 @@
         refreshAsteroidRendering();
       }
     } else {
-      // wrong key: flash miss, reset typed buffer, break combo
+      // Wrong key: play a miss sound and break the combo, but keep whatever
+      // was already typed correctly - wiping it entirely on a single typo
+      // was too punishing for beginners/young kids learning the keyboard.
       sfx.miss();
       s.combo = 0;
-      s.typed = '';
-      typedPreview.textContent = '';
-      refreshAsteroidRendering();
     }
   }
 
@@ -769,13 +811,32 @@
     comboDisplay.classList.remove('show');
     levelUpBanner.classList.remove('show');
 
-    state = makeState(selectedPack);
+    state = makeState(selectedPack, selectedPackId);
     state.running = true;
     renderLives(state);
     updateHud(state);
     showScreen(gameScreen);
     focusHiddenInput();
     state.rafId = requestAnimationFrame(tick);
+  }
+
+  function encouragementMessage(acc) {
+    if (acc >= 90) return "Amazing spelling! You're a star! ⭐";
+    if (acc >= 70) return "Great job! Keep practicing!";
+    return "Nice try! You'll get faster every time!";
+  }
+
+  function refreshPackBestBadge(packId) {
+    const tile = document.querySelector('.pack-tile[data-pack-id="' + packId + '"]');
+    const best = getBestScore(packId);
+    if (!tile || !best) return;
+    let badge = tile.querySelector('.pack-best-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'pack-best-badge';
+      tile.appendChild(badge);
+    }
+    badge.textContent = '🏆 ' + best.score;
   }
 
   function endGame(s) {
@@ -787,6 +848,13 @@
     document.getElementById('finalWpm').textContent = wpm;
     document.getElementById('finalAcc').textContent = acc + '%';
     document.getElementById('finalLevel').textContent = s.level;
+
+    const newBestBanner = document.getElementById('newBestBanner');
+    const isNewBest = s.score > 0 && saveBestScoreIfHigher(s.packId, s.score, wpm);
+    newBestBanner.classList.toggle('hidden', !isNewBest);
+    if (isNewBest) refreshPackBestBadge(s.packId);
+
+    document.getElementById('encourageMsg').textContent = encouragementMessage(acc);
     showScreen(gameOverScreen);
   }
 
