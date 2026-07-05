@@ -32,7 +32,7 @@ jobs:
         run: npm ci
 
       - name: Sync web assets into native projects
-        run: npx cap sync android
+        run: npm run sync-web && npx cap sync android
 
       - name: Build debug APK
         working-directory: android
@@ -58,7 +58,7 @@ jobs:
         run: npm ci
 
       - name: Sync web assets into native projects
-        run: npx cap sync ios
+        run: npm run sync-web && npx cap sync ios
 
       - name: Build for iOS Simulator (unsigned)
         run: |
